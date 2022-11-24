@@ -10,7 +10,7 @@ import com.ecom.base.BaseClass;
 public class LoginPagePom extends BaseClass  {
 	public LoginPagePom() {
 		PageFactory.initElements(driver, this);
-	}
+		}
 		@FindBy(xpath = "//input[@name='uid']")
 		WebElement userId;
 		
