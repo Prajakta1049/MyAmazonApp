@@ -11,6 +11,9 @@ public class EditCustomerPom extends BaseClass{
 		PageFactory.initElements(driver, this);	
 		
 		}
+		@FindBy(linkText = "Edit Customer")
+		WebElement editCustomer;
+	
 		@FindBy(xpath = "//input[@name='cusid']")			
 		WebElement customerID;
 
@@ -20,7 +23,7 @@ public class EditCustomerPom extends BaseClass{
 		@FindBy(xpath = "//input[@name='res']")			
 		WebElement resetButton;
 
-		public void customerForm(String name) {
+		public void setcustomerID(String name) {
 			customerID.sendKeys(name);
 			submitButton.click();
 			

@@ -43,23 +43,32 @@ public class AddCustomerTest extends BaseClass {
 		//Assert.assertEquals(title, "GTPL Bank Manager HomePage");
 		}
 	
-	@Test(priority = 1)
-		public void fillDataForm() throws EncryptedDocumentException, IOException {
+	@Test
+		public void testfillDataForm() throws EncryptedDocumentException, IOException {
 			SoftAssert softAssert=new SoftAssert();
 			
 			excelReader = new ExcelReader();
 			Sheet sh=excelReader.getSheet("LoginPage");
+			
 			Map<String,Object> data= excelReader.getData(sh);
+			
 			loginPagePom=new LoginPagePom();
-			loginPagePom.setLoginCredentials((String)data.get("UserID"),(String)data.get("Password")); 
+			loginPagePom.setLoginCredentials((String)data.get("UserID"),(String)data.get("Password"));
+			
 			softAssert.assertEquals(data.get("UserID").toString(), "mngr266311");
 			loginPagePom.clickLoginButton();
+			
 			softAssert.assertAll();
+			
 			Sheet sh1=excelReader.getSheet("NewCustomer");
+			
 			Map<String,Object> info= excelReader.getData(sh1);
+			
 			addCustomerPom = new AddCustomerPom();
+			
 			addCustomerPom.fillUpForm((String)info.get("CustomerName"),(String) info.get("Address"),(String)info.get("City"));	
 			addCustomerPom.clickOnSubmitButton();
+			
 			utility.takeScreenShot("Manager page");
 		}
 		//public void clickOnSubmitButton() {}

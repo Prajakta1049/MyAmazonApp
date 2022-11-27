@@ -10,15 +10,20 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
+import com.ecom.base.BaseClass;
 import com.ecom.pom.AddCustomerPom;
+import com.ecom.pom.EditCustomerPom;
 import com.ecom.pom.LoginPagePom;
+import com.ecom.pom.ManagerHomePom;
 import com.ecom.utility.ExcelReader;
 import com.ecom.utility.Utility;
 
-public class EditCustomerTest{
+public class EditCustomerTest extends BaseClass{
 	LoginPagePom loginPagePom;
 	LoginTest loginTest;
+	ManagerHomePom managerHomePom;
 	AddCustomerPom addCustomerPom;
+	EditCustomerPom editCustomerPom;
 	ExcelReader excelReader;
 	Utility utility;
 	
@@ -31,32 +36,44 @@ public class EditCustomerTest{
 	public void tearDown() {
 		driver.quit();
 	}
+	
 	@Test(priority = 0)
-	public void fillFormTitle() {
+	public void testPageTittle() {
 		utility = new Utility();
 		String title=utility.getTitle();
 		System.out.println(title);
 		//Assert.assertEquals(title, "GTPL Bank Manager HomePage");
-		}
+	}
 	
 	@Test(priority = 1)
-		public void fillDataForm() throws EncryptedDocumentException, IOException {
+		public void testValidID() throws EncryptedDocumentException, IOException {
 			SoftAssert softAssert=new SoftAssert();
 			
 			excelReader = new ExcelReader();
 			Sheet sh=excelReader.getSheet("LoginPage");
+			
 			Map<String,Object> data= excelReader.getData(sh);
 			loginPagePom=new LoginPagePom();
-			loginPagePom.setLoginCredentials((String)data.get("UserID"),(String)data.get("Password")); 
+			
+			loginPagePom.setLoginCredentials((String)data.get("UserID"),(String)data.get("Password"));
+			
 			softAssert.assertEquals(data.get("UserID").toString(), "mngr266311");
+			
 			loginPagePom.clickLoginButton();
 			softAssert.assertAll();
-			Sheet sh1=excelReader.getSheet("NewCustomer");
-			Map<String,Object> info= excelReader.getData(sh1);
-			addcustomerpom = new AddCustomerPom();
-			addcustomerpom.fillUpForm((String)info.get("CustomerName"),(String) info.get("Address"),(String)info.get("City"));	
-			addcustomerpom.clickOnSubmitButton();
-			utility.takeScreenShot("Manager page");
+			
+			managerHomePom.clickOnEditCustomer();
+						
+			Sheet sh2=excelReader.getSheet("CustomerID");
+			String id=excelReader.getSingleData(sh, 1, 0).toString();
+			System.out.println(id);
+			
+			editCustomerPom = new EditCustomerPom();
+			editCustomerPom.setcustomerID(sh.getRow(1).getCell(0).getStringCellValue());
+			
+			System.out.println(sh);
+			
+			Utility.takeScreenShot("Edit customer");
 		}
 
 }
